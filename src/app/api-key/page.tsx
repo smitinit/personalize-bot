@@ -32,23 +32,15 @@ import {
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 
+type ApiKey = {
+  id: string;
+  name: string;
+  key: string;
+  created?: string;
+  lastUsed: string;
+};
 export default function ApiKeys() {
-  const [apiKeys, setApiKeys] = useState([
-    {
-      id: "1",
-      name: "Production",
-      key: "sk_prod_2fGh7iKl9mNoPqRs3tUv4wXyZ",
-      created: "2023-04-15",
-      lastUsed: "2023-04-24",
-    },
-    {
-      id: "2",
-      name: "Development",
-      key: "sk_dev_5aBcDeFgHiJkLmNoPqRsTuVwX",
-      created: "2023-04-10",
-      lastUsed: "2023-04-23",
-    },
-  ]);
+  const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
 
   const [newKeyName, setNewKeyName] = useState("");
   const [copied, setCopied] = useState<string | null>(null);
@@ -72,7 +64,16 @@ export default function ApiKeys() {
         lastUsed: "Never",
       };
 
-      setApiKeys([...apiKeys, newKeyObj]);
+      setApiKeys((prevArr) => {
+        return [
+          ...prevArr,
+          {
+            ...newKeyObj,
+            created: newKeyObj.created ?? "", // Default to empty string if undefined
+          },
+        ];
+      });
+
       setNewKeyName("");
     }, 1000);
   };
@@ -267,6 +268,11 @@ export default function ApiKeys() {
                   ))}
                 </TableBody>
               </Table>
+              {!apiKeys.length && (
+                <small className="flex justify-center p-6">
+                  No api key yet, start by generating one.
+                </small>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -299,7 +305,7 @@ export default function ApiKeys() {
                   <h3 className="text-lg font-medium">Example Request</h3>
                   <div className="bg-muted mt-2 overflow-x-auto rounded-md p-4">
                     <code className="text-xs whitespace-pre-wrap md:text-sm">
-                      {`fetch('https://api.botpersona.com/v1/chat', {
+                      {`fetch('https://api.botperson.acom/v1/chat', {
                       method: 'POST',
                       headers: {
                         'Content-Type': 'application/json',
