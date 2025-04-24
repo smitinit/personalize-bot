@@ -1,6 +1,6 @@
 # TODO - List :
 
-- [ ] Make it deploy (Vercel)
+- [x] Make it deploy (Vercel)
 - [ ] Set up db (Supabase)
 - [ ] db w ui (Shadcn)
 - [ ] Add auth (clerk)
