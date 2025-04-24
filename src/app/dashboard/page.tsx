@@ -51,14 +51,23 @@ export default function Dashboard() {
         </div>
 
         <Tabs defaultValue="personality" className="space-y-4">
-          <TabsList className="no-scrollbar flex h-12 w-full justify-start overflow-x-auto md:justify-center">
-            <TabsTrigger value="personality" className="flex-1 md:flex-none">
+          <TabsList className="no-scrollbar flex h-12 w-full justify-start overflow-x-auto bg-white md:justify-center">
+            <TabsTrigger
+              value="personality"
+              className="flex-1 data-[state=active]:bg-blue-100 md:flex-none"
+            >
               Personality
             </TabsTrigger>
-            <TabsTrigger value="knowledge" className="flex-1 md:flex-none">
+            <TabsTrigger
+              value="knowledge"
+              className="flex-1 data-[state=active]:bg-blue-100 md:flex-none"
+            >
               Knowledge
             </TabsTrigger>
-            <TabsTrigger value="appearance" className="flex-1 md:flex-none">
+            <TabsTrigger
+              value="appearance"
+              className="flex-1 data-[state=active]:bg-blue-100 md:flex-none"
+            >
               Appearance
             </TabsTrigger>
           </TabsList>
