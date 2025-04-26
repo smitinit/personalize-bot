@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { Check, Copy, Key, Plus, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Copy, Key } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -162,18 +162,6 @@ export default function ApiKeys() {
                       {`<Bot apikey='sk_....'/>`}
                     </code>
                   </div>
-                </div>
-
-                <div className="flex justify-end">
-                  <Button
-                    variant="outline"
-                    asChild
-                    className="w-full sm:w-auto"
-                  >
-                    <a href="/docs" target="_blank" rel="noreferrer">
-                      View Full Documentation
-                    </a>
-                  </Button>
                 </div>
               </div>
             </CardContent>
