@@ -16,7 +16,7 @@ export default async function Form() {
     .from(bot)
     .where(eq(bot.botId, user.userId))
     .limit(1);
-  const botAvatarUrl = userBot[0]?.botavatarURL;
+  const botAvatarUrl = userBot[0]?.botavatarURL ?? "";
 
   return (
     <>
