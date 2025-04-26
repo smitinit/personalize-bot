@@ -26,8 +26,8 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="flex h-16 w-full items-center justify-around border-b">
-      <div className="container flex h-16 w-full items-center justify-between">
+    <header className="h-16 w-full border-b">
+      <div className="container flex h-16 w-full items-center justify-around">
         <div className="flex items-center gap-2">
           <Bot className="h-6 w-6" />
           <span className="text-lg font-bold">BotPersona</span>
@@ -84,7 +84,13 @@ export default function Navbar() {
                     {item.name}
                   </Link>
                 ))}
-                <Button className="mt-4">Sign In</Button>
+                <SignedOut>
+                  <SignInButton />
+                </SignedOut>
+                <SignedIn>
+                  <UserButton />
+                  <SignOutButton />
+                </SignedIn>
               </div>
             </SheetContent>
           </Sheet>

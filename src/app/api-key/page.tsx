@@ -32,7 +32,7 @@ export default function ApiKeys() {
 
   useEffect(() => {
     async function getApiKey() {
-      const key: Key = await fetch("/api/apikey")
+      const key: Key = await fetch("/api/apikey", { cache: "force-cache" })
         .then((res) => res.json() as Promise<Key>)
         .catch((error) => {
           console.error("Error fetching API key:", error);
@@ -49,9 +49,13 @@ export default function ApiKeys() {
 
   const copyToClipboard = async (text: string) => {
     await navigator.clipboard.writeText(text);
-    toast("API key copied");
+    toast.info("API key copied");
   };
 
+  function truncateString(str: string, length: number) {
+    if (str.length <= length) return str;
+    return str.slice(0, length) + "..." + str.slice(str.length - 4, str.length); // Truncate and add ellipsis
+  }
   return (
     <main className="flex w-full justify-center p-2">
       <div className="flex flex-col py-6 md:py-10 lg:min-w-[80%]">
@@ -64,11 +68,6 @@ export default function ApiKeys() {
               Manage API keys for your bot integration
             </p>
           </div>
-
-          {/* <Button className="w-full sm:w-auto">
-            <Plus className="mr-2 h-4 w-4" />
-            Generate New Key
-          </Button> */}
         </div>
 
         <Card>
@@ -101,7 +100,7 @@ export default function ApiKeys() {
                         <div className="flex items-center space-x-2">
                           <Key className="text-muted-foreground h-4 w-4" />
                           <span className="font-mono text-xs sm:text-sm">
-                            {apiKey}
+                            {truncateString(apiKey, 20)}
                           </span>
                         </div>
                       </TableCell>
@@ -117,15 +116,6 @@ export default function ApiKeys() {
 
                             <span className="sr-only">Copy</span>
                           </Button>
-
-                          {/* <Button
-                            variant="ghost"
-                            size="icon"
-                            // onClick={() => deleteKey(apiKey.id)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                            <span className="sr-only">Delete</span>
-                          </Button> */}
                         </div>
                       </TableCell>
                     </TableRow>

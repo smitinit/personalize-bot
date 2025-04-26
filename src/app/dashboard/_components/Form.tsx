@@ -2,26 +2,32 @@ import { auth } from "@clerk/nextjs/server";
 import AppearanceForm from "./AppearanceForm";
 import KnowledgeForm from "./KnowledgeForm";
 import PersonalityForm from "./PersonalityForm";
-import { db } from "@/server/db";
-import { bot } from "@/server/db/schema";
-import { eq } from "drizzle-orm";
+
+import {
+  getBotAvatarUrl,
+  getKnowledgeBase,
+  getPersonalityBase,
+} from "@/server/queries";
+import { redirect } from "next/navigation";
 
 export default async function Form() {
   const user = await auth();
   if (!user.userId) {
-    return <p>User not authenticated</p>;
+    return redirect("/");
   }
-  const userBot = await db
-    .select({ botavatarURL: bot.botavatarURL })
-    .from(bot)
-    .where(eq(bot.botId, user.userId))
-    .limit(1);
-  const botAvatarUrl = userBot[0]?.botavatarURL ?? "";
-
+  const botAvatarUrl = await getBotAvatarUrl(user.userId);
+  const knowledgeBase = await getKnowledgeBase(user.userId);
+  const personalityBase = await getPersonalityBase(user.userId);
+  console.log(botAvatarUrl);
   return (
     <>
-      <PersonalityForm />
-      <KnowledgeForm />
+      <PersonalityForm
+        personalityBaseValues={{
+          ...personalityBase,
+          CustomExpertise: personalityBase.CustomExpertise ?? "None",
+        }}
+      />
+      <KnowledgeForm knowledgeBaseValues={knowledgeBase} />
       <AppearanceForm botavatar={botAvatarUrl} />
     </>
   );

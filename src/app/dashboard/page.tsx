@@ -1,8 +1,17 @@
-import { Button } from "@/components/ui/button";
-import { Save } from "lucide-react";
 import Form from "./_components/Form";
 
+import { auth } from "@clerk/nextjs/server";
+import { saveDefaultToDb } from "@/server/queries";
+import { redirect } from "next/navigation";
+
 export default async function Dashboard() {
+  const { userId } = await auth();
+  if (userId) {
+    await saveDefaultToDb(userId);
+  } else {
+    redirect("/");
+  }
+
   return (
     <main className="flex w-full justify-center p-2">
       <div className="w-full space-y-8 md:py-10 lg:w-[80%]">
@@ -15,13 +24,6 @@ export default async function Dashboard() {
               Customize your bot&apos;s personality and behavior
             </p>
           </div>
-          <Button
-            // onClick={handleSave}
-            // disabled={isSaving}
-            className="w-full md:w-auto"
-          >
-            <Save className="mr-2 h-4 w-4" /> Save Changes
-          </Button>
         </div>
 
         <Form />

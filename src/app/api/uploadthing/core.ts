@@ -1,7 +1,5 @@
-import { db } from "@/server/db";
-import { bot } from "@/server/db/schema";
+import { setBotAvatarUrl } from "@/server/queries";
 import { auth } from "@clerk/nextjs/server";
-import { eq } from "drizzle-orm";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 // import { UploadThingError } from "uploadthing/server";
 
@@ -36,29 +34,12 @@ export const ourFileRouter = {
       console.log("upload thing completed id: ", metadata.userId);
 
       console.log("upload for db started id: ", metadata.userId);
-      const existingBot = await db
-        .select()
-        .from(bot)
-        .where(eq(bot.botId, metadata.userId));
 
-      if (existingBot.length > 0) {
-        // Update existing row
-        await db
-          .update(bot)
-          .set({
-            botavatarURL: file.ufsUrl,
-            updatedAt: new Date(),
-          })
-          .where(eq(bot.botId, metadata.userId));
-      } else {
-        // Insert new row
-        await db.insert(bot).values({
-          botId: metadata.userId,
-          botavatarURL: file.ufsUrl,
-          updatedAt: new Date(),
-          apiKey: "",
-        });
-      }
+      //  save the file URL in database
+      await setBotAvatarUrl(metadata.userId, file.ufsUrl).catch((err) => {
+        console.log("error in upload for db: ", err);
+        throw new Error("Failed to update bot avatar URL in the database");
+      });
 
       console.log("upload for db finished id: ", metadata.userId);
       console.log("file url: ", file.ufsUrl);

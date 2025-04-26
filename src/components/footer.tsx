@@ -11,19 +11,20 @@ export default function Footer() {
         </div>
 
         <nav className="text-muted-foreground flex flex-wrap justify-center gap-4 text-sm">
-          <Link href="/privacy" className="hover:text-primary">
+          <Link href="/" className="hover:text-primary">
             Privacy
           </Link>
-          <Link href="/terms" className="hover:text-primary">
+          <Link href="/" className="hover:text-primary">
             Terms
           </Link>
-          <Link href="/docs" className="hover:text-primary">
+          <Link href="/" className="hover:text-primary">
             Documentation
           </Link>
         </nav>
 
         <div className="text-muted-foreground text-center text-sm md:text-right">
-          &copy; {new Date().getFullYear()} BotPersona. All rights reserved.
+          &copy; {new Date().getFullYear()} Personalized Bot. All rights
+          reserved.
         </div>
       </div>
     </footer>

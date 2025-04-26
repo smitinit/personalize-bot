@@ -10,7 +10,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -32,21 +31,28 @@ export default function AppearanceForm({
 }: {
   botavatar: BotAvatar;
 }) {
-  const [isSaving, setIsSaving] = useState(false);
+  const [field, setField] = useState("bottom-right");
 
-  const handleSave = () => {
-    setIsSaving(true);
-    setTimeout(() => {
-      setIsSaving(false);
-      toast("Appearance updated.");
-    }, 1000);
+  const handleSelectPosistion = async (value: string) => {
+    // simulate api
+    const res = await fetch("/api/botposition", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ position: value }),
+    });
+    if (!res.ok) {
+      toast.error("Something went wrong. Please try again.");
+    }
+    toast.success("Position updated.");
+    setField(value);
   };
 
   const router = useRouter();
   return (
     <>
-      {" "}
-      <Card className="">
+      <Card>
         <CardHeader>
           <CardTitle>Bot Appearance</CardTitle>
           <CardDescription>Customize how your bot looks</CardDescription>
@@ -74,14 +80,16 @@ export default function AppearanceForm({
                     className="mt-4"
                     appearance={{
                       button: cn(
-                        "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors",
-                        "bg-transparent hover:bg-accent hover:text-accent-foreground",
+                        "inline-flex items-center  justify-center rounded-md text-sm font-medium transition-colors",
+                        "bg-black/90 dark:bg-muted hover:bg-black/80  ",
+                        "dark:hover:bg-accent dark:hover:text-accent-foreground ",
                         "border border-input shadow-sm",
                         "h-10 px-4 py-2",
-                        "text-muted-foreground",
+                        "text-muted-foreground dark:text-muted-foreground",
                         "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
                         "disabled:opacity-50 disabled:pointer-events-none",
                       ),
+
                       allowedContent: "text-xs text-muted-foreground",
                     }}
                     onClientUploadComplete={() => {
@@ -95,21 +103,11 @@ export default function AppearanceForm({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="primary-color">Primary Color</Label>
-            <div className="flex flex-col gap-2 sm:flex-row">
-              <Input
-                id="primary-color"
-                type="color"
-                className="h-10 w-full p-1 sm:w-12"
-                defaultValue="#0ea5e9"
-              />
-              <Input defaultValue="#0ea5e9" className="w-full sm:flex-1" />
-            </div>
-          </div>
-
-          <div className="space-y-2">
             <Label htmlFor="chat-position">Chat Widget Position</Label>
-            <Select defaultValue="bottom-right">
+            <Select
+              defaultValue={field}
+              onValueChange={(value) => handleSelectPosistion(value)}
+            >
               <SelectTrigger id="chat-position">
                 <SelectValue placeholder="Select position" />
               </SelectTrigger>
@@ -122,21 +120,6 @@ export default function AppearanceForm({
             </Select>
           </div>
         </CardContent>
-        {/* <CardFooter className="flex justify-end">
-        <Button
-          onClick={handleSave}
-          disabled={isSaving}
-          className="flex w-fit justify-end md:w-auto"
-        >
-          {isSaving ? (
-            "Saving..."
-          ) : (
-            <>
-              <Save className="mr-2 h-4 w-4" /> Save Changes
-            </>
-          )}
-        </Button>
-      </CardFooter> */}
       </Card>
       <Toaster expand={false} richColors />
     </>
