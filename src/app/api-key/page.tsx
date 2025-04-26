@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { Check, Copy, Key, Plus, RefreshCw, Trash2 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Check, Copy, Key, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,8 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+
 import {
   Table,
   TableBody,
@@ -20,80 +19,37 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 
-type ApiKey = {
-  id: string;
-  name: string;
-  key: string;
-  created?: string;
-  lastUsed: string;
+type Key = {
+  apiKey: string;
 };
+
 export default function ApiKeys() {
-  const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
+  const [apiKey, setApiKey] = useState<string | null>(null);
 
-  const [newKeyName, setNewKeyName] = useState("");
-  const [copied, setCopied] = useState<string | null>(null);
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [showNewKey, setShowNewKey] = useState<string | null>(null);
+  useEffect(() => {
+    async function getApiKey() {
+      const key: Key = await fetch("/api/apikey")
+        .then((res) => res.json() as Promise<Key>)
+        .catch((error) => {
+          console.error("Error fetching API key:", error);
+          return { apiKey: "" };
+        });
+      if (key.apiKey) {
+        const { apiKey: fetchedApiKey } = key;
+        setApiKey(fetchedApiKey);
+      }
+    }
 
-  const generateApiKey = () => {
-    setIsGenerating(true);
-    // Simulate API call
-    setTimeout(() => {
-      const newKey = `sk_${Math.random().toString(36).substring(2, 15)}_${Math.random().toString(36).substring(2, 15)}`;
-      setShowNewKey(newKey);
-      setIsGenerating(false);
+    getApiKey().catch((error) => console.log(error));
+  }, []);
 
-      // Add to list after dialog is closed
-      const newKeyObj = {
-        id: (apiKeys.length + 1).toString(),
-        name: newKeyName,
-        key: newKey,
-        created: new Date().toISOString().split("T")[0],
-        lastUsed: "Never",
-      };
-
-      setApiKeys((prevArr) => {
-        return [
-          ...prevArr,
-          {
-            ...newKeyObj,
-            created: newKeyObj.created ?? "", // Default to empty string if undefined
-          },
-        ];
-      });
-
-      setNewKeyName("");
-    }, 1000);
-  };
-
-  const copyToClipboard = async (text: string, id: string) => {
+  const copyToClipboard = async (text: string) => {
     await navigator.clipboard.writeText(text);
-    setCopied(id);
-    setTimeout(() => setCopied(null), 2000);
-
     toast("API key copied");
-  };
-
-  const deleteKey = (id: string) => {
-    setApiKeys(apiKeys.filter((key) => key.id !== id));
-
-    toast("API key deleted");
-  };
-
-  const maskApiKey = (key: string) => {
-    return `${key.substring(0, 8)}...${key.substring(key.length - 4)}`;
   };
 
   return (
@@ -109,84 +65,10 @@ export default function ApiKeys() {
             </p>
           </div>
 
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button className="w-full sm:w-auto">
-                <Plus className="mr-2 h-4 w-4" />
-                Generate New Key
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-md">
-              <DialogHeader>
-                <DialogTitle>Generate API Key</DialogTitle>
-                <DialogDescription>
-                  Create a new API key to integrate your bot with other
-                  services.
-                </DialogDescription>
-              </DialogHeader>
-
-              <div className="grid gap-4 py-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="name">Key Name</Label>
-                  <Input
-                    id="name"
-                    placeholder="e.g., Production, Development"
-                    value={newKeyName}
-                    onChange={(e) => setNewKeyName(e.target.value)}
-                  />
-                </div>
-
-                {showNewKey && (
-                  <div className="grid gap-2">
-                    <Label htmlFor="api-key">Your New API Key</Label>
-                    <div className="flex flex-col items-center gap-2 sm:flex-row">
-                      <Input
-                        id="api-key"
-                        value={showNewKey}
-                        readOnly
-                        className="font-mono text-xs sm:text-sm"
-                      />
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={() => copyToClipboard(showNewKey, "new")}
-                        className="mt-2 sm:mt-0"
-                      >
-                        {copied === "new" ? (
-                          <Check className="h-4 w-4" />
-                        ) : (
-                          <Copy className="h-4 w-4" />
-                        )}
-                      </Button>
-                    </div>
-                    <p className="text-muted-foreground text-xs sm:text-sm">
-                      Make sure to copy this key now. You won&apos;t be able to
-                      see it again!
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              <DialogFooter>
-                {!showNewKey ? (
-                  <Button
-                    onClick={generateApiKey}
-                    disabled={!newKeyName || isGenerating}
-                    className="w-full sm:w-auto"
-                  >
-                    {isGenerating ? "Generating..." : "Generate Key"}
-                  </Button>
-                ) : (
-                  <Button
-                    onClick={() => setShowNewKey(null)}
-                    className="w-full sm:w-auto"
-                  >
-                    Done
-                  </Button>
-                )}
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+          {/* <Button className="w-full sm:w-auto">
+            <Plus className="mr-2 h-4 w-4" />
+            Generate New Key
+          </Button> */}
         </div>
 
         <Card>
@@ -205,70 +87,52 @@ export default function ApiKeys() {
                     <TableHead className="hidden sm:table-cell">
                       API Key
                     </TableHead>
-                    <TableHead className="hidden md:table-cell">
-                      Created
-                    </TableHead>
-                    <TableHead className="hidden md:table-cell">
-                      Last Used
-                    </TableHead>
+
                     <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {apiKeys.map((apiKey) => (
-                    <TableRow key={apiKey.id}>
+                  {apiKey && (
+                    <TableRow>
                       <TableCell className="font-medium">
-                        {apiKey.name}
+                        YOUR_API_KEY
                       </TableCell>
                       <TableCell className="hidden sm:table-cell">
                         <div className="flex items-center space-x-2">
                           <Key className="text-muted-foreground h-4 w-4" />
                           <span className="font-mono text-xs sm:text-sm">
-                            {maskApiKey(apiKey.key)}
+                            {apiKey}
                           </span>
                         </div>
                       </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        {apiKey.created}
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        {apiKey.lastUsed}
-                      </TableCell>
+
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-1 md:gap-2">
                           <Button
                             variant="ghost"
                             size="icon"
-                            onClick={() =>
-                              copyToClipboard(apiKey.key, apiKey.id)
-                            }
+                            onClick={() => copyToClipboard(apiKey)}
                           >
-                            {copied === apiKey.id ? (
-                              <Check className="h-4 w-4" />
-                            ) : (
-                              <Copy className="h-4 w-4" />
-                            )}
+                            <Copy className="h-4 w-4" />
+
                             <span className="sr-only">Copy</span>
                           </Button>
-                          <Button variant="ghost" size="icon">
-                            <RefreshCw className="h-4 w-4" />
-                            <span className="sr-only">Refresh</span>
-                          </Button>
-                          <Button
+
+                          {/* <Button
                             variant="ghost"
                             size="icon"
-                            onClick={() => deleteKey(apiKey.id)}
+                            // onClick={() => deleteKey(apiKey.id)}
                           >
                             <Trash2 className="h-4 w-4" />
                             <span className="sr-only">Delete</span>
-                          </Button>
+                          </Button> */}
                         </div>
                       </TableCell>
                     </TableRow>
-                  ))}
+                  )}
                 </TableBody>
               </Table>
-              {!apiKeys.length && (
+              {!apiKey && (
                 <small className="flex justify-center p-6">
                   No api key yet, start by generating one.
                 </small>
@@ -291,8 +155,8 @@ export default function ApiKeys() {
                 <div>
                   <h3 className="text-lg font-medium">Authentication</h3>
                   <p className="text-muted-foreground text-xs md:text-sm">
-                    Include your API key in the Authorization header of your
-                    requests:
+                    Your API key in the Authorization header of your requests
+                    will be done automatically.
                   </p>
                   <div className="bg-muted mt-2 overflow-x-auto rounded-md p-4">
                     <code className="text-xs whitespace-nowrap md:text-sm">
@@ -302,20 +166,10 @@ export default function ApiKeys() {
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-medium">Example Request</h3>
+                  <h3 className="text-lg font-medium">Demo</h3>
                   <div className="bg-muted mt-2 overflow-x-auto rounded-md p-4">
                     <code className="text-xs whitespace-pre-wrap md:text-sm">
-                      {`fetch('https://api.botperson.acom/v1/chat', {
-                      method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer YOUR_API_KEY'
-                      },
-                      body: JSON.stringify({
-                        message: 'Hello, bot!',
-                        userId: 'user-123'
-                      })
-                    })`}
+                      {`<Bot apikey='sk_....'/>`}
                     </code>
                   </div>
                 </div>

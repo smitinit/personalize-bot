@@ -4,7 +4,7 @@ import { Bot } from "lucide-react";
 export default function Footer() {
   return (
     <footer className="border-t py-6">
-      <div className="flex flex-col items-center justify-around gap-4 md:flex-row">
+      <div className="flex flex-row items-center justify-around gap-4 md:flex-row">
         <div className="flex items-center gap-2">
           <Bot className="h-5 w-5" />
           <span className="text-sm font-medium">BotPersona</span>
