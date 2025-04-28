@@ -1,0 +1,18 @@
+#bot-container {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: gray transparent;
+}
+
+#bot-container:hover::-webkit-scrollbar-thumb {
+  background-color: #4b5563; /* Tailwind's gray-700 */
+}
+
+#bot-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+#bot-container::-webkit-scrollbar-thumb {
+  background-color: #6b7280; /* Tailwind's gray-500 */
+  border-radius: 9999px; /* Fully rounded */
+}

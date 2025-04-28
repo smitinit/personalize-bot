@@ -5,5 +5,6 @@
 - [x] db w ui (Shadcn)
 - [x] Add auth (clerk)
 - [x] Routing (app router)
+- [x] Sentry
 - [ ] Ratelimiting (upstash)
 - [ ] Analytics (posthog)

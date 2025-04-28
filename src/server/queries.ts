@@ -158,3 +158,15 @@ export async function saveDefaultToDb(userId: string) {
     throw new Error("Failed to save default values to the database");
   }
 }
+
+export async function getAllBotUserValues(userId: string) {
+  const [botValues] = await db
+    .select()
+    .from(bot)
+    .where(eq(bot.botId, userId))
+    .limit(1);
+  if (!botValues) {
+    throw new Error("No bot values found for the user");
+  }
+  return botValues;
+}

@@ -26,15 +26,15 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="h-16 w-full border-b">
-      <div className="container flex h-16 w-full items-center justify-around">
+    <header className="border-b">
+      <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-2">
           <Bot className="h-6 w-6" />
           <span className="text-lg font-bold">BotPersona</span>
         </div>
 
         {/* Desktop Navigation */}
-        <nav className="hidden items-center gap-6 md:flex">
+        <nav className="hidden items-center gap-8 md:flex">
           {navItems.map((item) => (
             <Link
               key={item.path}

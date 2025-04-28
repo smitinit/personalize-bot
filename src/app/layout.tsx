@@ -14,6 +14,9 @@ import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "@/app/api/uploadthing/core";
 
+import Bot from "./bot/proto";
+import { auth } from "@clerk/nextjs/server";
+
 export const metadata: Metadata = {
   title: "Personalise Bot",
   description: "Dashboard for Personalise Bot",
@@ -24,9 +27,10 @@ const geist = Geist({
   variable: "--font-geist-sans",
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const { userId } = await auth();
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={geist.className}>
@@ -49,6 +53,14 @@ export default function RootLayout({
             <div className="flex min-h-screen flex-col">
               <Navbar />
               <main className="flex-1">{children}</main>
+              <Bot
+                position="bottom-right"
+                height={800}
+                width={450}
+                title="Customer Support"
+                userId={userId!}
+              />
+
               <Footer />
             </div>
           </ThemeProvider>

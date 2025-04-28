@@ -2,14 +2,6 @@
 
 import { useState } from "react";
 import { Bot } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -24,6 +16,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { SignedIn } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 type BotAvatar = string | undefined;
 export default function AppearanceForm({
@@ -52,21 +45,27 @@ export default function AppearanceForm({
   const router = useRouter();
   return (
     <>
-      <Card>
-        <CardHeader>
-          <CardTitle>Bot Appearance</CardTitle>
-          <CardDescription>Customize how your bot looks</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
+      <section className="border-t py-6">
+        <div className="mb-4">
+          <h2 className="text-xl font-semibold">Bot Appearance</h2>
+          <p className="text-muted-foreground text-sm">
+            Customize how your bot looks
+          </p>
+        </div>
+
+        <div className="space-y-6">
           <div className="w-full space-y-2">
             <Label>Bot Avatar</Label>
             <div className="flex w-full flex-col items-center justify-center gap-4">
-              <div className="flex h-32 w-32 items-center justify-center">
+              <div className="flex h-32 w-32 items-center justify-center rounded-full border p-2">
                 {botavatar ? (
-                  <img
-                    src={botavatar}
+                  <Image
+                    src={botavatar || "/placeholder.svg"}
                     alt="Avatar of bot"
-                    className="h-full w-full rounded-full object-fill"
+                    className="h-full w-full rounded-full"
+                    style={{ objectFit: "fill" }}
+                    width={128}
+                    height={128}
                   />
                 ) : (
                   <Bot className="text-primary h-8 w-8" />
@@ -80,16 +79,15 @@ export default function AppearanceForm({
                     className="mt-4"
                     appearance={{
                       button: cn(
-                        "inline-flex items-center  justify-center rounded-md text-sm font-medium transition-colors",
-                        "bg-black/90 dark:bg-muted hover:bg-black/80  ",
-                        "dark:hover:bg-accent dark:hover:text-accent-foreground ",
+                        "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors",
+                        "bg-black/90 dark:bg-muted hover:bg-black/80",
+                        "dark:hover:bg-accent dark:hover:text-accent-foreground",
                         "border border-input shadow-sm",
                         "h-10 px-4 py-2",
                         "text-muted-foreground dark:text-muted-foreground",
                         "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
                         "disabled:opacity-50 disabled:pointer-events-none",
                       ),
-
                       allowedContent: "text-xs text-muted-foreground",
                     }}
                     onClientUploadComplete={() => {
@@ -102,7 +100,7 @@ export default function AppearanceForm({
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div className="max-w-md space-y-2">
             <Label htmlFor="chat-position">Chat Widget Position</Label>
             <Select
               defaultValue={field}
@@ -119,8 +117,8 @@ export default function AppearanceForm({
               </SelectContent>
             </Select>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </section>
       <Toaster expand={false} richColors />
     </>
   );

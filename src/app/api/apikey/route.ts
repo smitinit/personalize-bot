@@ -25,7 +25,7 @@ export async function GET() {
 
     return NextResponse.json({ apiKey });
   }
-  console.log("api key already exists", ExistingAPIKey.apiKey);
+  console.log("api key already exists");
 
   return NextResponse.json({ apiKey: ExistingAPIKey.apiKey });
 }

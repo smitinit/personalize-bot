@@ -1,13 +1,6 @@
 "use client";
-import { useTransition } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 
+import { useTransition } from "react";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
@@ -42,15 +35,15 @@ export default function KnowledgeForm({
 
   return (
     <form action={handleSubmit}>
-      <Card>
-        <CardHeader>
-          <CardTitle>Knowledge Base</CardTitle>
-          <CardDescription>
+      <section className="border-t py-6">
+        <div className="mb-4">
+          <h2 className="text-xl font-semibold">Knowledge Base</h2>
+          <p className="text-muted-foreground text-sm">
             Define what your bot knows and how it responds
-          </CardDescription>
-        </CardHeader>
+          </p>
+        </div>
 
-        <CardContent className="space-y-4">
+        <div className="space-y-6">
           <div className="space-y-2">
             <Label htmlFor="greeting">Default Greeting</Label>
             <Textarea
@@ -59,6 +52,7 @@ export default function KnowledgeForm({
               placeholder="How should your bot introduce itself?"
               required
               defaultValue={knowledgeBaseValues.greeting}
+              className="max-w-2xl"
             />
           </div>
 
@@ -70,11 +64,12 @@ export default function KnowledgeForm({
               placeholder="What should your bot say when it doesn't know the answer?"
               required
               defaultValue={knowledgeBaseValues.fallback}
+              className="max-w-2xl"
             />
           </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div className="flex items-center justify-between space-y-0 pt-2">
+          <div className="grid max-w-2xl grid-cols-1 gap-6 md:grid-cols-2">
+            <div className="flex items-center justify-between space-y-0 border-t pt-2 ">
               <div className="flex flex-col space-y-1">
                 <Label htmlFor="use-web">Web Search</Label>
                 <p className="text-muted-foreground text-xs md:text-sm">
@@ -88,7 +83,7 @@ export default function KnowledgeForm({
               />
             </div>
 
-            <div className="flex items-center justify-between space-y-0 pt-2">
+            <div className="flex items-center justify-between space-y-0 border-t pt-2">
               <div className="flex flex-col space-y-1">
                 <Label htmlFor="use-docs">Custom Documents</Label>
                 <p className="text-muted-foreground text-xs md:text-sm">
@@ -112,8 +107,8 @@ export default function KnowledgeForm({
               {isPending ? "Saving..." : "Save Changes"}
             </button>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </section>
     </form>
   );
 }

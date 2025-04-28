@@ -1,13 +1,6 @@
 "use client";
 
 import { useTransition } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -49,17 +42,19 @@ export default function PersonalityForm({
       }
     });
   };
+
   return (
     <form action={handleSubmit}>
-      <Card>
-        <CardHeader>
-          <CardTitle>Bot Personality</CardTitle>
-          <CardDescription>
+      <section className="py-1">
+        <div className="mb-4">
+          <h2 className="text-xl font-semibold">Bot Personality</h2>
+          <p className="text-muted-foreground text-sm">
             Define how your bot interacts with users
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          </p>
+        </div>
+
+        <div className="space-y-6">
+          <div className="grid max-w-2xl grid-cols-1 gap-6 md:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="bot-name">Bot Name</Label>
               <Input
@@ -91,19 +86,19 @@ export default function PersonalityForm({
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div className="max-w-2xl space-y-2">
             <Label htmlFor="bot-thesis">Bot Thesis</Label>
             <Textarea
               id="bot-thesis"
               placeholder="What is your bot's main purpose or philosophy?"
-              className="min-h-[100px]"
+              className="max-h-[500px] min-h-[100px]"
               name="botthesis"
               defaultValue={personalityBaseValues.botThesis}
               required
             />
           </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="grid max-w-2xl grid-cols-1 gap-6 md:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="expertise">Area of Expertise</Label>
               <Select
@@ -138,17 +133,18 @@ export default function PersonalityForm({
               />
             </div>
           </div>
-        </CardContent>
-        <div className="flex justify-end px-6 pt-4">
-          <Button
-            type="submit"
-            className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-4 py-2 text-sm font-medium"
-            disabled={isPending}
-          >
-            {isPending ? "Saving..." : "Save Changes"}
-          </Button>
+
+          <div className="flex justify-end pt-4">
+            <Button
+              type="submit"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-4 py-2 text-sm font-medium"
+              disabled={isPending}
+            >
+              {isPending ? "Saving..." : "Save Changes"}
+            </Button>
+          </div>
         </div>
-      </Card>
+      </section>
     </form>
   );
 }

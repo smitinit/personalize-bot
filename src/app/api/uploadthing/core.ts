@@ -31,9 +31,9 @@ export const ourFileRouter = {
     })
     .onUploadComplete(async ({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload
-      console.log("upload thing completed id: ", metadata.userId);
+      // console.log("upload thing completed id: ", metadata.userId);
 
-      console.log("upload for db started id: ", metadata.userId);
+      // console.log("upload for db started id: ", metadata.userId);
 
       //  save the file URL in database
       await setBotAvatarUrl(metadata.userId, file.ufsUrl).catch((err) => {
@@ -41,8 +41,8 @@ export const ourFileRouter = {
         throw new Error("Failed to update bot avatar URL in the database");
       });
 
-      console.log("upload for db finished id: ", metadata.userId);
-      console.log("file url: ", file.ufsUrl);
+      // console.log("upload for db finished id: ", metadata.userId);
+      // console.log("file url: ", file.ufsUrl);
 
       return { uploadedBy: metadata.userId };
     }),
