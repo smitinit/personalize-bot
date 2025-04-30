@@ -14,7 +14,7 @@ import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "@/app/api/uploadthing/core";
 
-import Bot from "./bot/proto";
+import Bot from "./bot - test/proto";
 import { auth } from "@clerk/nextjs/server";
 
 export const metadata: Metadata = {
