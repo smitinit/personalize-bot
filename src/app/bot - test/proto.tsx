@@ -3,7 +3,7 @@
 import "./proto.css";
 
 import React, { useState, useEffect, useRef } from "react";
-import { X, Send, MessageSquare } from "lucide-react";
+import { X, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -272,10 +272,11 @@ export default function Bot({
         )}
         size="icon"
       >
-        <Avatar className="h-12 w-12 rounded-full border-1 border-slate-500 object-cover object-center">
+        <Avatar className="h-12 w-12 rounded-full border-1 border-slate-500">
           <Image
-            className="absolute object-fill object-center"
+            className="absolute h-12 w-12"
             src={avatarUrlRef.current}
+            style={{ objectFit: "fill" }}
             alt="Bot Avatar"
             width={128}
             height={128}
@@ -342,7 +343,7 @@ export default function Bot({
                 key={msg.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.2, delay: index * 0.05 }} // slight stagger
+                transition={{ duration: 0.2, delay: index * 0.05 }}
                 className={cn(
                   "flex items-start gap-2",
                   msg.role === "user" ? "justify-end" : "justify-start",

@@ -22,7 +22,6 @@ export default async function Form() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-2">
-      {/* <h1 className="mb-6 text-2xl font-bold">Bot Configuration</h1> */}
       <div className="mb-6 flex flex-col justify-between border-b-1 p-2 md:mb-8">
         <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
           Bot Dashboard

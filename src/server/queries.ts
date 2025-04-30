@@ -20,15 +20,6 @@ export async function setBotAvatarUrl(userId: string, botavatarURL: string) {
     throw new Error("Failed to update bot avatar URL in the database");
   }
 }
-export async function postChatBotPosition(position: string, userId: string) {
-  const positionData = await db
-    .update(bot)
-    .set({ position: position })
-    .where(eq(bot.botId, userId));
-  if (!positionData) {
-    throw new Error("Failed to update position in the database");
-  }
-}
 
 export async function setKnowledgeBase(
   userId: string,

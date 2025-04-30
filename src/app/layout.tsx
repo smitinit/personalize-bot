@@ -57,7 +57,7 @@ export default async function RootLayout({
                 position="bottom-right"
                 height={800}
                 width={450}
-                title="Customer Support"
+                title="Personalise bot"
                 userId={userId!}
               />
 
